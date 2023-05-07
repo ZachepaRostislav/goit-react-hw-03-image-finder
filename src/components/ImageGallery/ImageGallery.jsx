@@ -1,81 +1,8 @@
-// import React, { Component } from 'react';
-// import ImageGalleryItem from 'components/ImageGalleryItem';
-// import Button from 'components/Button';
-
-// export default class ImageGallery extends Component {
-//   state = {
-//     hits: [],
-//     page: 1,
-//     isLoading: false,
-//     error: null,
-//   };
-
-//   componentDidUpdate(prevProps, prevState) {
-//     const prevName = prevProps.imageName;
-//     const nextName = this.props.imageName;
-//     if (prevName !== nextName) {
-//       fetch(
-//         `https://pixabay.com/api/?q=${nextName}&page=1&key=34723066-8d4f91c8f936e3aca5c8bd269&image_type=photo&orientation=horizontal&per_page=12`
-//       )
-//         .then(response => {
-//           if (!response.ok) {
-//             throw new Error(`image gallery ${response.status}`);
-//           }
-//           return response.json();
-//         })
-//         .then(data => {
-//           const hits = data.hits;
-
-//           console.log(hits);
-//           this.setState({ hits });
-//         })
-//         .catch(error => console.error('Error:', error));
-//     }
-//   }
-//   fetchImages = () => {
-//     const { page } = this.state;
-//     const { imageName } = this.props;
-//     fetch(
-//       `https://pixabay.com/api/?q=${imageName}&page=${page}&key=34723066-8d4f91c8f936e3aca5c8bd269&image_type=photo&orientation=horizontal&per_page=12`
-//     )
-//       .then(response => {
-//         if (!response.ok) {
-//           throw new Error(`image gallery ${response.status}`);
-//         }
-//         return response.json();
-//       })
-//       .then(data => {
-//         const newHits = data.hits;
-//         this.setState(prevState => ({
-//           hits: [...prevState.hits, ...newHits],
-//           page: prevState.page + 1,
-//         }));
-//       })
-//       .catch(error => console.error('Error:', error));
-//   };
-//   render() {
-//     const { hits } = this.state;
-//     return (
-//       <>
-//         <ul className="gallery">
-//           {this.state.hits &&
-//             this.state.hits.map(hit => (
-//               <ImageGalleryItem
-//                 key={hit.id}
-//                 id={hit.id}
-//                 url={hit.webformatURL}
-//                 tags={hit.tags}
-//               />
-//             ))}
-//           {hits.length > 0 && <Button onClick={this.fetchImages} />}
-//         </ul>
-//       </>
-//     );
-//   }
-// }
 import React, { Component } from 'react';
 import ImageGalleryItem from 'components/ImageGalleryItem';
 import Button from 'components/Button';
+import Loader from 'components/Loader';
+import { List } from './ImageGallery.styled';
 
 export default class ImageGallery extends Component {
   state = {
@@ -102,6 +29,7 @@ export default class ImageGallery extends Component {
         return response.json();
       })
       .then(data => {
+        console.log(data);
         const newHits = data.hits;
         if (newHits.length === 0) {
           this.setState({ isLoading: false });
@@ -134,18 +62,18 @@ export default class ImageGallery extends Component {
     return (
       <>
         {error && <div>{error.message}</div>}
-        <ul className="gallery">
+        <List>
           {hits.map(hit => (
             <ImageGalleryItem
               key={hit.id}
               id={hit.id}
-              url={hit.webformatURL}
+              previewImg={hit.webformatURL}
               tags={hit.tags}
             />
           ))}
-        </ul>
-        {isLoading && <div>Loading...</div>}
-        {!isLoading && hits.length > 0 && (
+        </List>
+        {isLoading && <Loader />}
+        {!isLoading && hits.length >= 12 && (
           <Button nextImages={this.fetchImages} />
         )}
       </>

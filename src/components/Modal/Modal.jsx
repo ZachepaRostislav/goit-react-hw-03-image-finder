@@ -1,11 +1,12 @@
 import React from 'react';
+import { Overlay, Window, ModalImg } from './Modal.styled';
 
 export default function Modal() {
   return (
-    <div className="overlay">
-      <div className="modal">
-        <img src="" alt="" />
-      </div>
-    </div>
+    <Overlay>
+      <Window>
+        <ModalImg src="" alt="" />
+      </Window>
+    </Overlay>
   );
 }

@@ -1,6 +1,13 @@
 import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {
+  Header,
+  Form,
+  FormBtn,
+  FormBtnLabel,
+  FormInput,
+} from './Searchbar.styled';
 
 // const KEY = '34723066-8d4f91c8f936e3aca5c8bd269';
 // const PATH = `https://pixabay.com/api/?q=cat&page=1&key=${KEY}&image_type=photo&orientation=horizontal&per_page=12`;
@@ -45,13 +52,13 @@ export default class Searchbar extends Component {
   render() {
     return (
       <>
-        <header className="searchbar">
-          <form className="form" onSubmit={this.handleSubmit}>
-            <button type="submit" className="button">
-              <span className="button-label">Search</span>
-            </button>
+        <Header>
+          <Form onSubmit={this.handleSubmit}>
+            <FormBtn type="submit">
+              <FormBtnLabel>Search</FormBtnLabel>
+            </FormBtn>
 
-            <input
+            <FormInput
               className="input"
               type="text"
               autoComplete="off"
@@ -60,8 +67,8 @@ export default class Searchbar extends Component {
               placeholder="Search images and photos"
               onChange={this.handleImageChange}
             />
-          </form>
-        </header>
+          </Form>
+        </Header>
       </>
     );
   }
