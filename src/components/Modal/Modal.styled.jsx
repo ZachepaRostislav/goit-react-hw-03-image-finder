@@ -23,4 +23,7 @@ export const Window = styled.div`
     0px 1px 1px 0pxrgba (0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 `;
 
-export const ModalImg = styled.img``;
+export const ModalImg = styled.img`
+  width: 100%;
+  object-fit: cover;
+`;

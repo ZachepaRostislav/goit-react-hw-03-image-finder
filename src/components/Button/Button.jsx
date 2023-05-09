@@ -1,10 +1,10 @@
 import React from 'react';
 import { Btn } from './Button.styled';
 
-export default function Button({ nextImages }) {
+export default function Button({ loadMore }) {
   return (
     <>
-      <Btn type="button" onClick={nextImages}>
+      <Btn type="button" onClick={loadMore}>
         Load More
       </Btn>
     </>
