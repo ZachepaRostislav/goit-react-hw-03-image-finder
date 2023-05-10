@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Form, FormBtn, FormInput, Header } from './Searchbar.styled';
-
+import PropTypes from 'prop-types';
 export default class Searchbar extends Component {
   state = {
     imageName: '',
@@ -54,3 +54,7 @@ export default class Searchbar extends Component {
     );
   }
 }
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};

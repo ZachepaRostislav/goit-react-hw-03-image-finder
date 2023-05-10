@@ -1,6 +1,6 @@
 import React from 'react';
 import { Btn } from './Button.styled';
-
+import PropTypes from 'prop-types';
 export default function Button({ loadMore }) {
   return (
     <>
@@ -10,3 +10,7 @@ export default function Button({ loadMore }) {
     </>
   );
 }
+
+Button.propTypes = {
+  loadMore: PropTypes.func.isRequired,
+};

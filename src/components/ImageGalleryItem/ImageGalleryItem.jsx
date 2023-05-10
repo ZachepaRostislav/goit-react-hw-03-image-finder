@@ -1,5 +1,6 @@
 import React from 'react';
 import { ItemImg, ListItem } from './ImageGalleryItem.styled';
+import PropTypes from 'prop-types';
 
 export default function ImageGalleryItem({
   id,
@@ -15,3 +16,10 @@ export default function ImageGalleryItem({
     </>
   );
 }
+
+ImageGalleryItem.propTypes = {
+  id: PropTypes.number.isRequired,
+  previewImg: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+  toggleModal: PropTypes.func.isRequired,
+};
