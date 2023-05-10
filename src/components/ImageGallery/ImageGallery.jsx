@@ -8,7 +8,7 @@ export default function ImageGallery({ hits, toggleModal }) {
       <List className="gallery">
         {hits.map(hit => (
           <ImageGalleryItem
-            key={hit.id}
+            key={hit.webformatURL}
             id={hit.id}
             previewImg={hit.webformatURL}
             tags={hit.tags}

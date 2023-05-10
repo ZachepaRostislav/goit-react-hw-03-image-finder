@@ -4,6 +4,7 @@ import ImageGallery from './ImageGallery';
 import Button from './Button';
 import Loader from './Loader';
 import Modal from './Modal';
+import { requestImages } from 'services/api';
 import { ToastContainer } from 'react-toastify';
 export default class App extends Component {
   state = {
@@ -15,19 +16,40 @@ export default class App extends Component {
     showModal: false,
     selectedImage: null,
     alt: null,
+    totalImages: 0,
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    console.log(prevState);
-    if (prevState.imageName !== this.state.imageName) {
-      this.setState({ hits: [], page: 1 }, () => {
-        this.fetchImages();
-      });
+  componentDidUpdate(_, prevState) {
+    const { imageName, page } = this.state;
+    if (prevState.imageName !== imageName || prevState.page !== page) {
+      this.fetchImages();
     }
   }
+  fetchImages = () => {
+    const { imageName, page } = this.state;
+    this.setState({ isLoading: true });
+    requestImages(imageName, page)
+      .then(data => {
+        const newHits = data.hits;
+        if (newHits.length === 0) {
+          return;
+        }
+        this.setState(prevState => ({
+          hits: [...prevState.hits, ...newHits],
+          totalImages: data.totalHits,
+        }));
+      })
+      .catch(error => {
+        this.setState({ error });
+        console.error('Error:', error);
+      })
+      .finally(() => {
+        this.setState({ isLoading: false });
+      });
+  };
 
   handleFormSubmit = imageName => {
-    this.setState({ imageName });
+    this.setState({ imageName, hits: [], page: 1, totalImages: 0 });
   };
 
   toggleModal = (largeImage, alt) => {
@@ -38,38 +60,9 @@ export default class App extends Component {
     }));
   };
 
-  fetchImages = () => {
-    const { imageName, page } = this.state;
-    this.setState({ isLoading: true });
-    fetch(
-      `https://pixabay.com/api/?q=${imageName}&page=${page}&key=34723066-8d4f91c8f936e3aca5c8bd269&image_type=photo&orientation=horizontal&per_page=12`
-    )
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`image gallery ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        const newHits = data.hits;
-        if (newHits.length === 0) {
-          this.setState({ isLoading: false });
-          return;
-        }
-        this.setState(prevState => ({
-          hits: [...prevState.hits, ...newHits],
-          page: prevState.page + 1,
-          isLoading: false,
-        }));
-      })
-      .catch(error => {
-        this.setState({ error, isLoading: false });
-        console.error('Error:', error);
-      });
-  };
-
   render() {
-    const { hits, isLoading, showModal, selectedImage, alt } = this.state;
+    const { hits, isLoading, showModal, selectedImage, alt, totalImages } =
+      this.state;
     return (
       <>
         <ToastContainer />
@@ -89,7 +82,7 @@ export default class App extends Component {
         )}
 
         {isLoading && <Loader />}
-        {!isLoading && hits.length >= 12 && (
+        {!isLoading && totalImages !== hits.length && (
           <Button loadMore={this.fetchImages} />
         )}
       </>
