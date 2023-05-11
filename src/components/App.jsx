@@ -52,6 +52,9 @@ export default class App extends Component {
     this.setState({ imageName, hits: [], page: 1, totalImages: 0 });
   };
 
+  incrementPage = () => {
+    this.setState(({ page }) => ({ page: page + 1 }));
+  };
   toggleModal = (largeImage, alt) => {
     this.setState(({ showModal }) => ({
       showModal: !showModal,
@@ -83,7 +86,7 @@ export default class App extends Component {
 
         {isLoading && <Loader />}
         {!isLoading && totalImages !== hits.length && (
-          <Button loadMore={this.fetchImages} />
+          <Button loadMore={this.incrementPage} />
         )}
       </>
     );
